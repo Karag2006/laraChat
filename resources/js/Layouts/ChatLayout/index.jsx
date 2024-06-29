@@ -1,4 +1,4 @@
-import { ConversationItem } from "@/Components/App/ConversationItem";
+import { ConversationItem } from "@/Layouts/ChatLayout/components/ConversationItem";
 import TextInput from "@/Components/TextInput";
 import { usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
