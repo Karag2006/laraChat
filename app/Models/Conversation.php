@@ -37,4 +37,30 @@ class Conversation extends Model
         }));
     }
 
+
+    public static function updateConversationWithMessage($userId1, $userId2, $message) {
+        // Get Conversation between userId1 and userId2
+        $conversation = Conversation::where(function ($query) use ($userId1, $userId2) {
+            $query->where('user_id1', $userId1)
+                ->where('user_id2', $userId2);
+        })->orWhere(function ($query) use ($userId1, $userId2) {
+            $query->where('user_id1', $userId2)
+                ->where('user_id2', $userId1);
+        })->first();
+
+        // and update last_message to be message if conversation exists
+        if ($conversation) {
+            $conversation->update([
+                'last_message_id' => $message->id,
+            ]);
+        // if no such conversation exists this is the first message
+        // of a new conversation.
+        } else {
+            Conversation::create([
+                'user_id1' => $userId1,
+                'user_id2' => $userId2,
+                'last_message_id' => $message->id,
+            ]);
+        }
+    }
 }
