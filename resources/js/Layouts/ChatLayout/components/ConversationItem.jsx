@@ -1,6 +1,8 @@
 import { Link, usePage } from "@inertiajs/react";
-import { UserAvatar } from "./UserAvatar";
-import { GroupAvatar } from "./GroupAvatar";
+
+import { UserAvatar } from "@/Components/App/UserAvatar";
+import { GroupAvatar } from "@/Components/App/GroupAvatar";
+
 import { UserOptionsDropdown } from "./UserOptionsDropdown";
 
 export const ConversationItem = ({

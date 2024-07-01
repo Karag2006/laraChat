@@ -19,7 +19,7 @@ class MessageResource extends JsonResource
             'id' => $this->id,
             'message' => $this->message,
             'sender_id' => $this->sender_id,
-            'reciever_id' => $this->reciever_id,
+            'receiver_id' => $this->receiver_id,
             'sender' => new UserResource($this->sender),
             'group_id' => $this->group_id,
             'attachments' => MessageAttachmentResource::collection($this->attachments),

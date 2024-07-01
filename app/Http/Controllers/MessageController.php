@@ -17,9 +17,9 @@ class MessageController extends Controller
 {
     public function byUser(User $user) {
         $messages = Message::where('sender_id', auth()->id())
-            ->where('reciever_id', $user->id)
+            ->where('receiver_id', $user->id)
             ->orWhere('sender_id', $user->id)
-            ->where('reciever_id', auth()->id())
+            ->where('receiver_id', auth()->id())
             ->latest()
             ->paginate(10);
 
@@ -50,9 +50,9 @@ class MessageController extends Controller
             $messages = Message::where('created_at', '<', $message->created_at)
                 ->where(function ($query) use ($message) {
                     $query->where('sender_id', $message->sender_id)
-                        ->where('reciever_id', $message->reciever_id)
-                        ->orWhere('sender_id', $message->reciever_id)
-                        ->where('reciever_id', $message->sender_id);
+                        ->where('receiver_id', $message->receiver_id)
+                        ->orWhere('sender_id', $message->receiver_id)
+                        ->where('receiver_id', $message->sender_id);
                 })
                 ->latest()
                 ->paginate(10);
@@ -65,7 +65,7 @@ class MessageController extends Controller
     public function store(StoreMessageRequest $request) {
         $data = $request->validated();
         $data['sender_id'] = auth()->id();
-        $recieverId = $data['reciever_id'] ?? null;
+        $recieverId = $data['receiver_id'] ?? null;
         $groupId = $data['group_id'] ?? null;
 
         $files = $data['attachments'] ?? [];

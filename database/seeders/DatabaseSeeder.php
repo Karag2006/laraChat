@@ -44,11 +44,11 @@ class DatabaseSeeder extends Seeder
         $messages = Message::whereNull('group_id')->orderBy('created_at')->get();
 
         $conversations = $messages->groupBy(function ($message) {
-            return collect([$message->sender_id, $message->reciever_id])->sort()->implode('_');
+            return collect([$message->sender_id, $message->receiver_id])->sort()->implode('_');
         })->map(function ($groupedMessages) {
             return [
                 'user_id1' => $groupedMessages->first()->sender_id,
-                'user_id2' => $groupedMessages->first()->reciever_id,
+                'user_id2' => $groupedMessages->first()->receiver_id,
                 'last_message_id' => $groupedMessages->last()->id,
                 'created_at' => new Carbon(),
                 'updated_at' => new Carbon(),

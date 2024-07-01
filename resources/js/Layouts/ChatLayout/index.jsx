@@ -81,8 +81,6 @@ const ChatLayout = ({ children }) => {
         };
     }, []);
 
-    console.log("conversations", conversations);
-    console.log("selectedConversation", selectedConversation);
     return (
         <>
             <div className="flex flex-1 w-full overflow-hidden">
@@ -125,7 +123,7 @@ const ChatLayout = ({ children }) => {
                             ))}
                     </div>
                 </aside>
-                <div className="flex flex-1 flx-col overflow-hidden">
+                <div className="flex flex-1 flex-col overflow-hidden">
                     {children}
                 </div>
             </div>
