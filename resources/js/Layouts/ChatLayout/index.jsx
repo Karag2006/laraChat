@@ -3,6 +3,7 @@ import TextInput from "@/Components/TextInput";
 import { usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import { HiPencilSquare } from "react-icons/hi2";
+import { useEventBus } from "@/EventBus";
 
 const ChatLayout = ({ children }) => {
     const page = usePage();
@@ -14,6 +15,7 @@ const ChatLayout = ({ children }) => {
     const [sortedConversations, setSortedConversations] = useState([]);
 
     const isUserOnline = (userId) => onlineUsers[userId];
+    const { on } = useEventBus();
 
     const onSearch = (event) => {
         const search = event.target.value.toLowerCase();
@@ -26,6 +28,41 @@ const ChatLayout = ({ children }) => {
             })
         );
     };
+
+    const messageCreated = (message) => {
+        setLocalConversations((oldConversations) => {
+            return oldConversations.map((c) => {
+                if (
+                    message.receiver_id &&
+                    !c.is_group &&
+                    (c.id == message.sender_id || c.id == message.receiver_id)
+                ) {
+                    c.last_message = message.message;
+                    c.last_message_date = message.created_at;
+                    return c;
+                }
+
+                if (
+                    message.group_id &&
+                    c.is_group &&
+                    c.id == message.group_id
+                ) {
+                    c.last_message = message.message;
+                    c.last_message_date = message.created_at;
+                    return c;
+                }
+                return c;
+            });
+        });
+    };
+
+    useEffect(() => {
+        const offCreated = on("message.created", messageCreated);
+
+        return () => {
+            offCreated();
+        };
+    }, [on]);
 
     useEffect(() => {
         setSortedConversations(

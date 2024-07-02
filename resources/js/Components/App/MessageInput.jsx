@@ -14,6 +14,8 @@ export const MessageInput = ({ conversation = null }) => {
     const [messageSending, setMessageSending] = useState(false);
 
     const onSendClick = () => {
+        if (messageSending) return;
+
         if (newMessage.trim() === "") {
             setInputErrorMessage("Please provide a message");
             setTimeout(() => {
@@ -78,11 +80,9 @@ export const MessageInput = ({ conversation = null }) => {
                     />
                     <button
                         onClick={onSendClick}
+                        disabled={messageSending}
                         className="btn btn-info rounded-l-none"
                     >
-                        {messageSending && (
-                            <span className="leading loading-spinner loading-xs"></span>
-                        )}
                         <HiPaperAirplane className="w-6" />
                         <span className="hidden sm:inline">Send</span>
                     </button>

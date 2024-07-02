@@ -1,0 +1,82 @@
+.chat-message-content {
+    blockquote,
+    dl,
+    dd,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    hr,
+    figure,
+    p,
+    pre {
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+
+    ol,
+    ul {
+        list-style: revert;
+        margin: revert;
+        padding: revert;
+    }
+
+    table {
+        border-collapse: revert;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-size: revert;
+        font-weight: revert;
+    }
+
+    a {
+        text-decoration: underline;
+        color: rgb(249, 249, 249);
+    }
+
+    & > :first-child {
+        margin-block-start: 0;
+    }
+
+    & > :last-child {
+        margin-block-end: 0;
+    }
+
+    blockquote {
+        overflow: hidden;
+        margin-inline: 0;
+        padding-inline: 1.5rem;
+        border-left: 5px solid #ccc;
+        font-style: italic;
+    }
+
+    code {
+        padding: 2px 4px;
+        border-radius: 6px;
+        background-color: rgba(0, 0, 0, 0.1);
+        font-size: 80%;
+        font-family: "Courier New", monospace;
+        font-style: italic;
+    }
+
+    pre {
+        padding: 1rem;
+        white-space: no-wrap;
+        overflow-x: auto;
+        font-style: italic;
+        background-color: rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+
+        code {
+            background-color: transparent;
+        }
+    }
+}

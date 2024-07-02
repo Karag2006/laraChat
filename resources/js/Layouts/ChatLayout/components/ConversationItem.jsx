@@ -4,6 +4,7 @@ import { UserAvatar } from "@/Components/App/UserAvatar";
 import { GroupAvatar } from "@/Components/App/GroupAvatar";
 
 import { UserOptionsDropdown } from "./UserOptionsDropdown";
+import { formatMessageDateShort } from "@/helpers";
 
 export const ConversationItem = ({
     conversation,
@@ -60,7 +61,9 @@ export const ConversationItem = ({
                     </h3>
                     {conversation.last_message_date && (
                         <span className="text-nowrap">
-                            {conversation.last_message_date}
+                            {formatMessageDateShort(
+                                conversation.last_message_date
+                            )}
                         </span>
                     )}
                 </div>
@@ -70,9 +73,9 @@ export const ConversationItem = ({
                     </p>
                 )}
             </div>
-            {currentUser.is_admin && conversation.is_user && (
+            {currentUser.is_admin && conversation.is_user ? (
                 <UserOptionsDropdown conversation={conversation} />
-            )}
+            ) : null}
         </Link>
     );
 };
