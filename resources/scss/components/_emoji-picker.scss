@@ -1,0 +1,11 @@
+.EmojiPickerReact {
+    .epr-header,
+    .epr-body {
+        background-color: theme("colors.gray.800");
+    }
+
+    .epr-emoji-category-label,
+    &:last-child {
+        background-color: theme("colors.gray.900");
+    }
+}
