@@ -8,10 +8,45 @@ import {
     HiPhoto,
 } from "react-icons/hi2";
 
-export const MessageInput = () => {
+export const MessageInput = ({ conversation = null }) => {
     const [newMessage, setNewMessage] = useState("");
     const [inputErrorMessage, setInputErrorMessage] = useState("");
     const [messageSending, setMessageSending] = useState(false);
+
+    const onSendClick = () => {
+        if (newMessage.trim() === "") {
+            setInputErrorMessage("Please provide a message");
+            setTimeout(() => {
+                setInputErrorMessage("");
+            }, 3000);
+            return;
+        }
+        const formData = new FormData();
+        formData.append("message", newMessage);
+        if (conversation.is_user) {
+            formData.append("receiver_id", conversation.id);
+        } else if (conversation.is_group) {
+            formData.append("group_id", conversation.id);
+        }
+        setMessageSending(true);
+        axios
+            .post(route("message.store"), formData, {
+                onUploadProgress: (progressEvent) => {
+                    const progress = Math.round(
+                        (progressEvent.loaded / progressEvent.total) * 100
+                    );
+                    console.log(progress);
+                },
+            })
+            .then((response) => {
+                setNewMessage("");
+                setMessageSending(false);
+            })
+            .catch((error) => {
+                setMessageSending(false);
+                console.error(error);
+            });
+    };
 
     return (
         <div className="flex flex-wrap items-start border-t border-slate-700 py-3">
@@ -39,8 +74,12 @@ export const MessageInput = () => {
                     <DynamicMessageInput
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
+                        onSend={onSendClick}
                     />
-                    <button className="btn btn-info rounded-l-none">
+                    <button
+                        onClick={onSendClick}
+                        className="btn btn-info rounded-l-none"
+                    >
                         {messageSending && (
                             <span className="leading loading-spinner loading-xs"></span>
                         )}
