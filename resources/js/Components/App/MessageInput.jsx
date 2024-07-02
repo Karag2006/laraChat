@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { DynamicMessageInput } from "@/Components/App/DynamicMessageInput";
+
+import EmojiPicker from "emoji-picker-react";
+import {
+    Popover,
+    PopoverButton,
+    PopoverPanel,
+    useClose,
+} from "@headlessui/react";
 import {
     HiFaceSmile,
     HiHandThumbUp,
@@ -8,10 +15,14 @@ import {
     HiPhoto,
 } from "react-icons/hi2";
 
+import { DynamicMessageInput } from "@/Components/App/DynamicMessageInput";
+
 export const MessageInput = ({ conversation = null }) => {
     const [newMessage, setNewMessage] = useState("");
     const [inputErrorMessage, setInputErrorMessage] = useState("");
     const [messageSending, setMessageSending] = useState(false);
+
+    const closeEmojiPicker = useClose();
 
     const onSendClick = () => {
         if (messageSending) return;
@@ -91,10 +102,26 @@ export const MessageInput = ({ conversation = null }) => {
                     <p className="text-xs text-red-400">{inputErrorMessage}</p>
                 )}
             </div>
+
             <div className="order-3 xs:order-3 p-2 flex">
-                <button className="p-1 text-gray-400 hoverfocus:text-gray-300">
-                    <HiFaceSmile className="w-6 h-6" />
-                </button>
+                <Popover className="relative">
+                    <PopoverButton className="p-1 text-gray-400 hoverfocus:text-gray-300">
+                        <HiFaceSmile className="w-6 h-6" />
+                    </PopoverButton>
+                    <PopoverPanel
+                        anchor="top end"
+                        transition
+                        className="flex origin-top flex-col transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0"
+                    >
+                        <EmojiPicker
+                            theme="dark"
+                            onEmojiClick={(event) => {
+                                setNewMessage(newMessage + event.emoji);
+                                closeEmojiPicker();
+                            }}
+                        />
+                    </PopoverPanel>
+                </Popover>
                 <button className="p-1 text-gray-400 hoverfocus:text-gray-300">
                     <HiHandThumbUp className="w-6 h-6" />
                 </button>
