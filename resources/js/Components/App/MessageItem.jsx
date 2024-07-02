@@ -3,6 +3,8 @@ import ReactMarkdown from "react-markdown";
 
 import { UserAvatar } from "./UserAvatar";
 import { formatMessageDateLong } from "@/helpers";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export const MessageItem = ({ message, attachmentClick }) => {
     const currentUser = usePage().props.auth.user;
@@ -36,7 +38,38 @@ export const MessageItem = ({ message, attachmentClick }) => {
             >
                 <div className="chat-message">
                     <div className="chat-message-content">
-                        <ReactMarkdown>{message.message}</ReactMarkdown>
+                        <ReactMarkdown
+                            children={message.message}
+                            components={{
+                                code(props) {
+                                    const {
+                                        children,
+                                        className,
+                                        node,
+                                        ...rest
+                                    } = props;
+                                    const match = /language-(\w+)/.exec(
+                                        className || ""
+                                    );
+                                    return match ? (
+                                        <SyntaxHighlighter
+                                            {...rest}
+                                            PreTag="div"
+                                            children={String(children).replace(
+                                                /\n$/,
+                                                ""
+                                            )}
+                                            language={match[1]}
+                                            style={oneDark}
+                                        />
+                                    ) : (
+                                        <code {...rest} className={className}>
+                                            {children}
+                                        </code>
+                                    );
+                                },
+                            }}
+                        />
                     </div>
                 </div>
             </div>
