@@ -5,6 +5,7 @@ import { UserAvatar } from "./UserAvatar";
 import { formatMessageDateLong } from "@/helpers";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { MessageAttachments } from "./MessageAttachments";
 
 export const MessageItem = ({ message, attachmentClick }) => {
     const currentUser = usePage().props.auth.user;
@@ -49,7 +50,7 @@ export const MessageItem = ({ message, attachmentClick }) => {
                                         ...rest
                                     } = props;
                                     const match = /language-(\w+)/.exec(
-                                        className || ""
+                                        className || "",
                                     );
                                     return match ? (
                                         <SyntaxHighlighter
@@ -57,7 +58,7 @@ export const MessageItem = ({ message, attachmentClick }) => {
                                             PreTag="div"
                                             children={String(children).replace(
                                                 /\n$/,
-                                                ""
+                                                "",
                                             )}
                                             language={match[1]}
                                             style={oneDark}
@@ -71,6 +72,10 @@ export const MessageItem = ({ message, attachmentClick }) => {
                             }}
                         />
                     </div>
+                    <MessageAttachments
+                        attachments={message.attachments}
+                        attachmentClick={attachmentClick}
+                    />
                 </div>
             </div>
         </div>

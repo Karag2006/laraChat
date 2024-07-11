@@ -10,11 +10,15 @@ import ChatLayout from "@/Layouts/ChatLayout";
 import { ConversationHeader } from "@/Components/App/ConversationHeader";
 import { MessageInput } from "@/Components/App/MessageInput";
 import { MessageItem } from "@/Components/App/MessageItem";
+import { AttachmentPreviewModal } from "@/Components/App/AttachmentPreviewModal";
 
 const Home = ({ selectedConversation, messages }) => {
     const [localMessages, setLocalMessages] = useState([]);
     const [noMoreMessages, setNoMoreMessages] = useState(false);
     const [scrollFromBottom, setScrollFromBottom] = useState(0);
+    const [showAttachmentPreview, setShowAttachmentPreview] = useState(false);
+    const [previewAttachment, setPreviewAttachment] = useState({});
+
     const messagesCtrRef = useRef(null);
     const loadMoreIntersect = useRef(null);
 
@@ -63,6 +67,14 @@ const Home = ({ selectedConversation, messages }) => {
             });
     }, [localMessages]);
 
+    const onAttachmentClick = (attachments, ind) => {
+        setPreviewAttachment({
+            attachments,
+            ind,
+        });
+        setShowAttachmentPreview(true);
+    };
+
     useEffect(() => {
         setTimeout(() => {
             if (messagesCtrRef.current) {
@@ -98,11 +110,11 @@ const Home = ({ selectedConversation, messages }) => {
         const observer = new IntersectionObserver(
             (entries) =>
                 entries.forEach(
-                    (entry) => entry.isIntersecting && loadMoreMessages()
+                    (entry) => entry.isIntersecting && loadMoreMessages(),
                 ),
             {
                 rootMargin: "0px 0px 250px 0px",
-            }
+            },
         );
 
         if (loadMoreIntersect.current) {
@@ -150,6 +162,7 @@ const Home = ({ selectedConversation, messages }) => {
                                     <MessageItem
                                         key={message.id}
                                         message={message}
+                                        attachmentClick={onAttachmentClick}
                                     />
                                 ))}
                             </div>
@@ -157,6 +170,15 @@ const Home = ({ selectedConversation, messages }) => {
                     </div>
                     <MessageInput conversation={selectedConversation} />
                 </>
+            )}
+
+            {previewAttachment.attachments && (
+                <AttachmentPreviewModal
+                    attachments={previewAttachment.attachments}
+                    index={previewAttachment.ind}
+                    show={showAttachmentPreview}
+                    onClose={() => setShowAttachmentPreview(false)}
+                />
             )}
         </>
     );

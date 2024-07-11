@@ -15,7 +15,8 @@ use Illuminate\Support\Str;
 
 class MessageController extends Controller
 {
-    public function byUser(User $user) {
+    public function byUser(User $user)
+    {
         $messages = Message::where('sender_id', auth()->id())
             ->where('receiver_id', $user->id)
             ->orWhere('sender_id', $user->id)
@@ -29,7 +30,8 @@ class MessageController extends Controller
         ]);
     }
 
-    public function byGroup(Group $group) {
+    public function byGroup(Group $group)
+    {
         $messages = Message::where('group_id', $group->id)
             ->latest()
             ->paginate(10);
@@ -40,8 +42,9 @@ class MessageController extends Controller
         ]);
     }
 
-    public function loadOlder(Message $message) {
-        if($message->group_id) {
+    public function loadOlder(Message $message)
+    {
+        if ($message->group_id) {
             $messages = Message::where('created_at', '<', $message->created_at)
                 ->where('group_id', $message->group_id)
                 ->latest()
@@ -59,10 +62,10 @@ class MessageController extends Controller
         }
 
         return MessageResource::collection($messages);
-
     }
 
-    public function store(StoreMessageRequest $request) {
+    public function store(StoreMessageRequest $request)
+    {
         $data = $request->validated();
         $data['sender_id'] = auth()->id();
         $recieverId = $data['receiver_id'] ?? null;
@@ -77,7 +80,6 @@ class MessageController extends Controller
             foreach ($files as $file) {
                 $directory = 'attachments/' . Str::random(32);
                 Storage::makeDirectory($directory);
-
                 $model = [
                     'message_id' => $message->id,
                     'name' => $file->getClientOriginalName(),
@@ -104,7 +106,8 @@ class MessageController extends Controller
         return new MessageResource($message);
     }
 
-    public function destroy(Message $message) {
+    public function destroy(Message $message)
+    {
         if ($message->sender_id !== auth()->id()) {
             return response()->json(['message' => 'Forbidden'], 403);
         }

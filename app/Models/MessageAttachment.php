@@ -10,7 +10,7 @@ class MessageAttachment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'messsage_id',
+        'message_id',
         'name',
         'path',
         'mime',
