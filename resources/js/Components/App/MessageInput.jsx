@@ -19,6 +19,8 @@ import {
 import { DynamicMessageInput } from "@/Components/App/DynamicMessageInput";
 import { isAudio, isImage } from "@/helpers";
 import { AttachmentPreview } from "./AttachmentPreview";
+import { CustomAudioPlayer } from "./CustomAudioPlayer";
+import { AudioRecorder } from "./AudioRecorder";
 
 export const MessageInput = ({ conversation = null }) => {
     const [newMessage, setNewMessage] = useState("");
@@ -36,6 +38,7 @@ export const MessageInput = ({ conversation = null }) => {
                 url: URL.createObjectURL(file),
             };
         });
+        event.target.value = null;
 
         setChosenFiles((prevFiles) => {
             return [...prevFiles, ...updatedFiles];
@@ -69,7 +72,7 @@ export const MessageInput = ({ conversation = null }) => {
             .post(route("message.store"), formData, {
                 onUploadProgress: (progressEvent) => {
                     const progress = Math.round(
-                        (progressEvent.loaded / progressEvent.total) * 100,
+                        (progressEvent.loaded / progressEvent.total) * 100
                     );
                     console.log(progress);
                     setUploadProgress(progress);
@@ -86,7 +89,7 @@ export const MessageInput = ({ conversation = null }) => {
                 setChosenFiles([]);
                 const message = error?.response?.data?.message;
                 setInputErrorMessage(
-                    message || "An error occurred while sending message",
+                    message || "An error occurred while sending message"
                 );
             });
     };
@@ -104,6 +107,10 @@ export const MessageInput = ({ conversation = null }) => {
         }
 
         axios.post(route("message.store"), data);
+    };
+
+    const recordedAudioReady = (file, url) => {
+        setChosenFiles((prevFiles) => [...prevFiles, { file, url }]);
     };
 
     return (
@@ -128,6 +135,7 @@ export const MessageInput = ({ conversation = null }) => {
                         className="absolute left-0 top-0 right-0 bottom-0 z-20 opacity-0 cursor-pointer"
                     />
                 </button>
+                <AudioRecorder fileReady={recordedAudioReady} />
             </div>
             <div className="order-1 px-3 xs:p-0 min-w-[220px] basis-full xs:basis-0 xs:order-2 flex-1 relative">
                 <div className="flex">
@@ -182,8 +190,8 @@ export const MessageInput = ({ conversation = null }) => {
                                     setChosenFiles(
                                         chosenFiles.filter(
                                             (f) =>
-                                                f.file.name !== file.file.name,
-                                        ),
+                                                f.file.name !== file.file.name
+                                        )
                                     )
                                 }
                                 className="absolute w-6 h-6 rounded-full bg-gray-800 -right-2 -top-2 text-gray-300 hoverfocus:text-gray-100 z-10"
