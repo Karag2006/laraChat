@@ -115,26 +115,34 @@ export const MessageInput = ({ conversation = null }) => {
 
     return (
         <div className="flex flex-wrap items-start border-t border-slate-700 py-3">
-            <div className="order-2 flex-1 xs:flex-none xs:order-1 p-2">
-                <button className="p-1 text-gray-400 hoverfocus:text-gray-300 relative">
+            <div className="order-2 flex xs:flex-none xs:order-1 p-2">
+                <label
+                    htmlFor="fileUpload"
+                    className="p-1 text-gray-400 hoverfocus:text-gray-300 cursor-pointer"
+                >
                     <HiPaperClip className="w-6" />
                     <input
+                        id="fileUpload"
                         onChange={onFileChange}
                         type="file"
                         multiple
-                        className="absolute left-0 top-0 right-0 bottom-0 z-20 opacity-0 cursor-pointer"
+                        className="hidden"
                     />
-                </button>
-                <button className="p-1 text-gray-400 hoverfocus:text-gray-300 relative">
+                </label>
+                <label
+                    htmlFor="imageUpload"
+                    className="p-1 text-gray-400 hoverfocus:text-gray-300 cursor-pointer"
+                >
                     <HiPhoto className="w-6" />
                     <input
+                        id="imageUpload"
                         onChange={onFileChange}
                         type="file"
                         multiple
                         accept="image/*"
-                        className="absolute left-0 top-0 right-0 bottom-0 z-20 opacity-0 cursor-pointer"
+                        className="hidden"
                     />
-                </button>
+                </label>
                 <AudioRecorder fileReady={recordedAudioReady} />
             </div>
             <div className="order-1 px-3 xs:p-0 min-w-[220px] basis-full xs:basis-0 xs:order-2 flex-1 relative">

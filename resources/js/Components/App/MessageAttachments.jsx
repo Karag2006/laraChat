@@ -32,7 +32,7 @@ export const MessageAttachments = ({ attachments, attachmentClick }) => {
                             {isImage(attachment) && (
                                 <img
                                     src={attachment.url}
-                                    className="object-contain aspect-square"
+                                    className="object-contain aspect-square w-full"
                                 />
                             )}
                             {isVideo(attachment) && (
@@ -45,10 +45,7 @@ export const MessageAttachments = ({ attachments, attachmentClick }) => {
                             )}
                             {isAudio(attachment) && (
                                 <div className="relative flex justify-center items-center">
-                                    <audio
-                                        src={attachment.url}
-                                        controls
-                                    ></audio>
+                                    <audio src={attachment.url} controls />
                                 </div>
                             )}
                             {isPDF(attachment) && (
@@ -57,7 +54,7 @@ export const MessageAttachments = ({ attachments, attachmentClick }) => {
                                     <iframe
                                         src={attachment.url}
                                         className="w-full h-full"
-                                    ></iframe>
+                                    />
                                 </div>
                             )}
                             {!isPreviewable(attachment) && (

@@ -28,7 +28,7 @@ const Home = ({ selectedConversation, messages }) => {
         if (
             selectedConversation &&
             selectedConversation.is_group &&
-            selectedConversation.id === message.group_id
+            selectedConversation.id == message.group_id
         ) {
             setLocalMessages((prevMessages) => [...prevMessages, message]);
         }
@@ -40,6 +40,29 @@ const Home = ({ selectedConversation, messages }) => {
                 selectedConversation.id == message.receiver_id)
         ) {
             setLocalMessages((prevMessages) => [...prevMessages, message]);
+        }
+    };
+
+    const messageDeleted = ({ message }) => {
+        if (
+            selectedConversation &&
+            selectedConversation.is_group &&
+            selectedConversation.id === message.group_id
+        ) {
+            setLocalMessages((prevMessages) => {
+                return prevMessages.filter((m) => m.id !== message.id);
+            });
+        }
+
+        if (
+            selectedConversation &&
+            selectedConversation.is_user &&
+            (selectedConversation.id == message.sender_id ||
+                selectedConversation.id == message.receiver_id)
+        ) {
+            setLocalMessages((prevMessages) => {
+                return prevMessages.filter((m) => m.id !== message.id);
+            });
         }
     };
 
@@ -84,12 +107,14 @@ const Home = ({ selectedConversation, messages }) => {
         }, 10);
 
         const offCreated = on("message.created", messageCreated);
+        const offDeleted = on("message.deleted", messageDeleted);
 
         setScrollFromBottom(0);
         setNoMoreMessages(false);
 
         return () => {
             offCreated();
+            offDeleted();
         };
     }, [selectedConversation]);
 
@@ -110,11 +135,11 @@ const Home = ({ selectedConversation, messages }) => {
         const observer = new IntersectionObserver(
             (entries) =>
                 entries.forEach(
-                    (entry) => entry.isIntersecting && loadMoreMessages(),
+                    (entry) => entry.isIntersecting && loadMoreMessages()
                 ),
             {
                 rootMargin: "0px 0px 250px 0px",
-            },
+            }
         );
 
         if (loadMoreIntersect.current) {
