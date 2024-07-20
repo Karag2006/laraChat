@@ -4,6 +4,7 @@ import { usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import { HiPencilSquare } from "react-icons/hi2";
 import { useEventBus } from "@/EventBus";
+import { GroupModal } from "@/Components/App/GroupModal";
 
 const ChatLayout = ({ children }) => {
     const page = usePage();
@@ -13,9 +14,11 @@ const ChatLayout = ({ children }) => {
     const [onlineUsers, setOnlineUsers] = useState({});
     const [localConversations, setLocalConversations] = useState([]);
     const [sortedConversations, setSortedConversations] = useState([]);
+    const [showGroupModal, setShowGroupModal] = useState(false);
+
+    const { on } = useEventBus();
 
     const isUserOnline = (userId) => onlineUsers[userId];
-    const { on } = useEventBus();
 
     const onSearch = (event) => {
         const search = event.target.value.toLowerCase();
@@ -139,7 +142,10 @@ const ChatLayout = ({ children }) => {
                             className="tooltip tooltip-left"
                             data-tip="Create new Group"
                         >
-                            <button className="text-gray-400 hoverfocus:text-gray-200">
+                            <button
+                                onClick={() => setShowGroupModal(true)}
+                                className="text-gray-400 hoverfocus:text-gray-200"
+                            >
                                 <HiPencilSquare className="w-4 h-4 inline-block ml-2" />
                             </button>
                         </div>
@@ -171,6 +177,10 @@ const ChatLayout = ({ children }) => {
                     {children}
                 </div>
             </div>
+            <GroupModal
+                show={showGroupModal}
+                onClose={() => setShowGroupModal(false)}
+            />
         </>
     );
 };
