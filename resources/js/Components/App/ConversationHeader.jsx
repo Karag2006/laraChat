@@ -15,15 +15,14 @@ export const ConversationHeader = ({ selectedConversation }) => {
         if (!window.confirm("Are you sure you want to delete this Group?"))
             return;
 
-        axios.delete(
-            route("group.destroy", selectedConversation.id)
-                .then((result) => {
-                    console.log(result);
-                })
-                .catch((error) => {
-                    console.error(error);
-                })
-        );
+        axios
+            .delete(route("group.destroy", selectedConversation.id))
+            .then((result) => {
+                emit("toast.show", result.data.message);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     };
 
     return (
