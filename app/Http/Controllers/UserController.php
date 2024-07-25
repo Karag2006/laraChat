@@ -36,10 +36,10 @@ class UserController extends Controller
     public function toggleBlock(User $user) {
         if($user->blocked_at) {
             $user->blocked_at = null;
-            $message = "Your Account has been activated";
+            $message = "User '".$user->name."' has been activated";
         } else {
             $user->blocked_at = now();
-            $message = "Your Account has been blocked";
+            $message = "User '".$user->name."' has been blocked";
         }
 
         $user->save();

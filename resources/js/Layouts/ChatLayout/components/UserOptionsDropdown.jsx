@@ -1,3 +1,4 @@
+import { useEventBus } from "@/EventBus";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import axios from "axios";
 import {
@@ -9,6 +10,8 @@ import {
 } from "react-icons/hi2";
 
 export const UserOptionsDropdown = ({ conversation }) => {
+    const { emit } = useEventBus();
+
     const changeUserRole = () => {
         console.log("Change User role");
         if (!conversation.is_user) return;
@@ -16,6 +19,7 @@ export const UserOptionsDropdown = ({ conversation }) => {
         axios
             .post(route("user.changeRole", conversation.id))
             .then((result) => {
+                emit("toast.show", result.data.message);
                 console.log(result.data);
             })
             .catch((error) => {
@@ -27,8 +31,9 @@ export const UserOptionsDropdown = ({ conversation }) => {
         if (!conversation.is_user) return;
 
         axios
-            .post(route("user.blockUnblock", conversation.id))
+            .post(route("user.toggleBlock", conversation.id))
             .then((result) => {
+                emit("toast.show", result.data.message);
                 console.log(result.data);
             })
             .catch((error) => {
