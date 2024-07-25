@@ -7,6 +7,9 @@ import { Link, usePage } from "@inertiajs/react";
 import { useEventBus } from "@/EventBus";
 import { Toast } from "@/Components/App/Toast";
 import { NewMessageNotification } from "@/Components/App/NewMessageNotification";
+import PrimaryButton from "@/Components/PrimaryButton";
+import { HiUserPlus } from "react-icons/hi2";
+import { NewUserModal } from "@/Components/App/NewUserModal";
 
 export default function AuthenticatedLayout({ header, children }) {
     const page = usePage();
@@ -14,6 +17,8 @@ export default function AuthenticatedLayout({ header, children }) {
     const conversations = page.props.conversations;
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
+    const [showNewUserModal, setShowNewUserModal] = useState(false);
+
     const { emit } = useEventBus();
 
     useEffect(() => {
@@ -106,7 +111,18 @@ export default function AuthenticatedLayout({ header, children }) {
                             </div>
 
                             <div className="hidden sm:flex sm:items-center sm:ms-6">
-                                <div className="ms-3 relative">
+                                <div className="flex ms-3 relative">
+                                    {user.is_admin && (
+                                        <PrimaryButton
+                                            onClick={(event) =>
+                                                setShowNewUserModal(true)
+                                            }
+                                        >
+                                            <HiUserPlus className="h-5 w-5 mr-2" />
+                                            Add New User
+                                        </PrimaryButton>
+                                    )}
+
                                     <Dropdown>
                                         <Dropdown.Trigger>
                                             <span className="inline-flex rounded-md">
@@ -246,6 +262,10 @@ export default function AuthenticatedLayout({ header, children }) {
             </div>
             <Toast />
             <NewMessageNotification />
+            <NewUserModal
+                show={showNewUserModal}
+                onClose={(ev) => setShowNewUserModal(false)}
+            />
         </>
     );
 }
