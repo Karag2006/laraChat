@@ -1,0 +1,17 @@
+.conversation-item {
+    .avatar.online::before,
+    .avatar.offline::before {
+        --_size: 0.6rem;
+        --_position: 1%;
+
+        width: var(--_size);
+        height: var(--_size);
+        top: var(--_position);
+        right: var(--_position);
+        outline-width: 1px;
+    }
+
+    .avatar.offline::before {
+        @apply bg-gray-200;
+    }
+}

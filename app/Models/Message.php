@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use App\Observers\MessageObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
+#[ObservedBy([MessageObserver::class])]
 
 class Message extends Model
 {
@@ -13,7 +17,7 @@ class Message extends Model
         'message',
         'sender_id',
         'group_id',
-        'reciever_id',
+        'receiver_id',
     ];
 
     public function sender() {
@@ -21,7 +25,7 @@ class Message extends Model
     }
 
     public function reciever() {
-        return $this->belongsTo(User::class, 'reciever_id');
+        return $this->belongsTo(User::class, 'receiver_id');
     }
 
     public function group() {

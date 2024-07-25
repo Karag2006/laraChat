@@ -38,7 +38,7 @@ class MessageFactory extends Factory
 
         return [
             'sender_id' => $senderId,
-            'reciever_id' => $recieverId,
+            'receiver_id' => $recieverId,
             'group_id' => $groupId,
             'message' => $this->faker->realText(200),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
